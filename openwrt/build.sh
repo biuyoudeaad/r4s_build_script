@@ -435,8 +435,8 @@ fi
 # Compile
 if [ "$BUILD_TOOLCHAIN" = "y" ]; then
     echo -e "\r\n${GREEN_COLOR}Building Toolchain ...${RES}\r\n"
-    make -j$cores toolchain/compile || make -j$cores toolchain/compile V=s || exit 1
-    make tools/clang/clean
+    make  V=s  -j$cores toolchain/compile || make  V=s  -j$cores toolchain/compile V=s || exit 1
+    make  V=s  tools/clang/clean
     rm -f dl/clang-*
     mkdir -p toolchain-cache
     [ "$ENABLE_GLIBC" = "y" ] && LIBC=glibc || LIBC=musl
@@ -446,12 +446,12 @@ if [ "$BUILD_TOOLCHAIN" = "y" ]; then
 else
     if [ "$BUILD_FAST" = "y" ]; then
         echo -e "\r\n${GREEN_COLOR}Building tools/clang ...${RES}\r\n"
-        make tools/clang/compile -j$cores
+        make  V=s  tools/clang/compile -j$cores
     fi
     echo -e "\r\n${GREEN_COLOR}Building OpenWrt ...${RES}\r\n"
     sed -i "/BUILD_DATE/d" package/base-files/files/usr/lib/os-release
     sed -i "/BUILD_ID/aBUILD_DATE=\"$CURRENT_DATE\"" package/base-files/files/usr/lib/os-release
-    make -j$cores IGNORE_ERRORS="n m"
+    make  V=s  -j$cores IGNORE_ERRORS="n m"
 fi
 
 # Compile time
